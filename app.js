@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rp = require('request-promise');
+const config = require('./config');
 
 var app = express();
 app.use(bodyParser.json());
@@ -160,7 +161,7 @@ function sendTextMessage(recipientId, messageText) {
 function callSendAPI(messageData) {
   rp({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
+    qs: { access_token: config.pageAccessToken },
     method: 'POST',
     json: messageData
 
