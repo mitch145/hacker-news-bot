@@ -24,6 +24,17 @@ app.get('/top', (req, res) => {
     .catch((error) => (console.log(error)))
 });
 
+app.get('/webhook', function(req, res) {
+  if (req.query['hub.mode'] === 'subscribe' &&
+      req.query['hub.verify_token'] === 'thisisatoken') {
+    console.log("Validating webhook");
+    res.status(200).send(req.query['hub.challenge']);
+  } else {
+    console.error("Failed validation. Make sure the validation tokens match.");
+    res.sendStatus(403);
+  }  
+});
+
 // Take array of story IDs and return array of story objects
 const getStories = stories => {
   return Promise.all(
