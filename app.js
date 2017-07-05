@@ -14,10 +14,8 @@ app.get('/top', (req, res) => {
   // Get top story IDs
   rp('https://hacker-news.firebaseio.com/v0/topstories.json')
     .then((body) => {
-
       // Only keep top 10 stories
       const stories = JSON.parse(body).slice(0, 10);
-
       // Get story objects from stories array
       getStories(stories)
         .then((mappedStories) => (res.send(mappedStories)))
@@ -30,7 +28,7 @@ app.get('/top', (req, res) => {
 const getStories = stories => {
   return Promise.all(
     stories.map(
-      (story) => (rp('https://hacker-news.firebaseio.com/v0/item/' + story + '.json')
+      (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
         .then((data) => (JSON.parse(data)))
       )
     )
