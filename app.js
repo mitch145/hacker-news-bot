@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const request = require('request');
+const rp = require('request-promise');
 
 var app = express();
 app.use(bodyParser.json());
@@ -11,14 +11,12 @@ app.get('/', (req, res) => (res.send('Hello World')))
 
 // Get IDs of top 10 stories
 app.get('/top', (req, res) => {
-  request('https://hacker-news.firebaseio.com/v0/topstories.json', (error, response, body) => {
-    if (!error && response.statusCode == 200) {
-      // Get array of top 10 stories from body
+  rp('https://hacker-news.firebaseio.com/v0/topstories.json')
+    .then((body) => {
       const stories = JSON.parse(body).slice(0, 10);
-      console.log(stories)
       res.send(stories);
-    }
-  })
+    })
+    .catch((error) => (console.log(error)))
 });
 
 app.listen(8080);
