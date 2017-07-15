@@ -159,8 +159,8 @@ function sendListMessage(recipientId) {
         "payload": {
           "template_type": "list",
           "elements": [{
-              "title": "Element One",
-              "subtitle": "See all our colors",
+              "title": "Seeing AI for iOS",
+              "subtitle": "173 points by kmather73 4 hours ago",
               "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
               "default_action": {
                 "type": "web_url",
@@ -177,8 +177,25 @@ function sendListMessage(recipientId) {
               }]
             },
             {
-              "title": "Element Two",
-              "subtitle": "See all our colors",
+              "title": "Gpu.js – GPU Accelerated JavaScript",
+              "subtitle": "149 points by olegkikin 4 hours ago",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "messenger_extensions": true,
+                "webview_height_ratio": "tall",
+              },
+              "buttons": [{
+                "title": "View",
+                "type": "web_url",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "messenger_extensions": true,
+                "webview_height_ratio": "tall",
+              }]
+            },
+            {
+              "title": "Google is releasing 20M bacteria-infected mosquitoes in Fresno",
+              "subtitle": "294 points by chriskanan 7 hours ago",
               "default_action": {
                 "type": "web_url",
                 "url": "https://hacker-news-chatbot.herokuapp.com/top",
