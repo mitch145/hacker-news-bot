@@ -115,7 +115,7 @@ function sendGenericMessage(recipientId) {
             title: "rift",
             subtitle: "Next-generation virtual reality",
             item_url: "https://www.oculus.com/en-us/rift/",
-            image_url: "http://messengerdemo.parseapp.com/img/rift.png",
+            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
@@ -129,7 +129,7 @@ function sendGenericMessage(recipientId) {
             title: "touch",
             subtitle: "Your Hands, Now in VR",
             item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: "http://messengerdemo.parseapp.com/img/touch.png",
+            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/touch/",
@@ -160,14 +160,14 @@ function sendListMessage(recipientId) {
           "template_type": "list",
           "elements": [{
               "title": "Classic T-Shirt Collection",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "See all our colors",
               "default_action": {
                 "type": "web_url",
                 "url": "https://peterssendreceiveapp.ngrok.io/shop_collection",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               },
               "buttons": [{
                 "title": "View",
@@ -175,19 +175,19 @@ function sendListMessage(recipientId) {
                 "url": "https://peterssendreceiveapp.ngrok.io/collection",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               }]
             },
             {
               "title": "Classic White T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "100% Cotton, 200% Comfortable",
               "default_action": {
                 "type": "web_url",
-                "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                "url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               },
               "buttons": [{
                 "title": "Shop Now",
@@ -195,19 +195,19 @@ function sendListMessage(recipientId) {
                 "url": "https://peterssendreceiveapp.ngrok.io/shop?item=100",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               }]
             },
             {
               "title": "Classic Blue T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "100% Cotton, 200% Comfortable",
               "default_action": {
                 "type": "web_url",
-                "url": "https://peterssendreceiveapp.ngrok.io/view?item=101",
+                "url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               },
               "buttons": [{
                 "title": "Shop Now",
@@ -215,19 +215,19 @@ function sendListMessage(recipientId) {
                 "url": "https://peterssendreceiveapp.ngrok.io/shop?item=101",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               }]
             },
             {
               "title": "Classic Black T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "100% Cotton, 200% Comfortable",
               "default_action": {
                 "type": "web_url",
-                "url": "https://peterssendreceiveapp.ngrok.io/view?item=102",
+                "url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               },
               "buttons": [{
                 "title": "Shop Now",
@@ -235,7 +235,7 @@ function sendListMessage(recipientId) {
                 "url": "https://peterssendreceiveapp.ngrok.io/shop?item=102",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989/?ref=hovercard"
               }]
             }
           ],
