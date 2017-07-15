@@ -161,7 +161,7 @@ function sendListMessage(recipientId) {
           "elements": [{
               "title": "Seeing AI for iOS",
               "subtitle": "173 points by kmather73 4 hours ago",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "default_action": {
                 "type": "web_url",
                 "url": "https://hacker-news-chatbot.herokuapp.com/top",
@@ -190,11 +190,6 @@ function sendListMessage(recipientId) {
               },
             },
           ],
-          "buttons": [{
-            "title": "View More",
-            "type": "postback",
-            "payload": "payload"
-          }]
         }
       }
     }
