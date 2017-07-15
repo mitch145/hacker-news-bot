@@ -161,6 +161,7 @@ function sendListMessage(recipientId) {
           "elements": [{
               "title": "Element One",
               "subtitle": "See all our colors",
+              "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
               "default_action": {
                 "type": "web_url",
                 "url": "https://hacker-news-chatbot.herokuapp.com/top",
