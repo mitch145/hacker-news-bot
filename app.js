@@ -163,14 +163,14 @@ function sendListMessage(recipientId) {
               "subtitle": "See all our colors",
               "default_action": {
                 "type": "web_url",
-                "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
               "buttons": [{
                 "title": "View",
                 "type": "web_url",
-                "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               }]
@@ -180,14 +180,14 @@ function sendListMessage(recipientId) {
               "subtitle": "See all our colors",
               "default_action": {
                 "type": "web_url",
-                "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
               "buttons": [{
                 "title": "View",
                 "type": "web_url",
-                "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               }]
