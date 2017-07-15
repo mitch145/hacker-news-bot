@@ -151,7 +151,7 @@ function sendGenericMessage(recipientId) {
 function sendListMessage(recipientId) {
   var messageData = {
     "recipient": {
-      "id": "RECIPIENT_ID"
+      "id": recipientId
     },
     "message": {
       "attachment": {
