@@ -168,13 +168,6 @@ function sendListMessage(recipientId) {
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
-              "buttons": [{
-                "title": "View",
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              }]
             },
             {
               "title": "Gpu.js – GPU Accelerated JavaScript",
@@ -185,13 +178,6 @@ function sendListMessage(recipientId) {
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
-              "buttons": [{
-                "title": "View",
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              }]
             },
             {
               "title": "Google is releasing 20M bacteria-infected mosquitoes in Fresno",
@@ -202,13 +188,6 @@ function sendListMessage(recipientId) {
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
-              "buttons": [{
-                "title": "View",
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              }]
             },
           ],
           "buttons": [{
