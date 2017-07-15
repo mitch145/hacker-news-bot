@@ -90,7 +90,7 @@ function receivedMessage(event) {
         sendGenericMessage(senderID);
         break;
       case 'top':
-        sendTopStories(senderID);
+        sendListMessage(senderID);
         break;
 
       default:
@@ -115,7 +115,8 @@ function sendGenericMessage(recipientId) {
             title: "rift",
             subtitle: "Next-generation virtual reality",
             item_url: "https://www.oculus.com/en-us/rift/",
-            image_url: "http://messengerdemo.parseapp.com/img/rift.png",
+            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
+
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
@@ -129,7 +130,7 @@ function sendGenericMessage(recipientId) {
             title: "touch",
             subtitle: "Your Hands, Now in VR",
             item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: "http://messengerdemo.parseapp.com/img/touch.png",
+            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/touch/",
@@ -140,6 +141,56 @@ function sendGenericMessage(recipientId) {
               payload: "Payload for second bubble",
             }]
           }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendListMessage(recipientId) {
+  var messageData = {
+    "recipient": {
+      "id": recipientId
+    },
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "elements": [{
+              "title": "Seeing AI for iOS",
+              "subtitle": "173 points by kmather73 4 hours ago",
+              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "messenger_extensions": true,
+                "webview_height_ratio": "tall",
+              },
+            },
+            {
+              "title": "Gpu.js – GPU Accelerated JavaScript",
+              "subtitle": "149 points by olegkikin 4 hours ago",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "messenger_extensions": true,
+                "webview_height_ratio": "tall",
+              },
+            },
+            {
+              "title": "Google is releasing 20M bacteria-infected mosquitoes in Fresno",
+              "subtitle": "294 points by chriskanan 7 hours ago",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "messenger_extensions": true,
+                "webview_height_ratio": "tall",
+              },
+            },
+          ],
         }
       }
     }
@@ -249,8 +300,30 @@ function sendTopStories(recipientId) {
     };
 
 
-    callSendAPI(messageData);
-  }
+
+function callSendAPI(messageData) {
+  rp({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {
+      access_token: config.pageAccessToken
+    },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      console.log("Successfully sent generic message with id %s to recipient %s",
+        messageId, recipientId);
+    } else {
+      console.error("Unable to send message.");
+      console.error(response);
+      console.error(error);
+    }
+  });
+}
 
   const sendTextMessage = (recipientId, messageText) => {
     var messageData = {
