@@ -25,15 +25,15 @@ app.get('/top', (req, res) => {
     .catch((error) => (console.log(error)))
 });
 
-app.get('/webhook', function(req, res) {
+app.get('/webhook', function (req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === 'thisisatoken') {
+    req.query['hub.verify_token'] === 'thisisatoken') {
     console.log("Validating webhook");
     res.status(200).send(req.query['hub.challenge']);
   } else {
     console.error("Failed validation. Make sure the validation tokens match.");
     res.sendStatus(403);
-  }  
+  }
 });
 
 app.post('/webhook', function (req, res) {
@@ -43,12 +43,12 @@ app.post('/webhook', function (req, res) {
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
-    data.entry.forEach(function(entry) {
+    data.entry.forEach(function (entry) {
       var pageID = entry.id;
       var timeOfEvent = entry.time;
 
       // Iterate over each messaging event
-      entry.messaging.forEach(function(event) {
+      entry.messaging.forEach(function (event) {
         if (event.message) {
           receivedMessage(event);
         } else {
@@ -65,14 +65,14 @@ app.post('/webhook', function (req, res) {
     res.sendStatus(200);
   }
 });
-  
+
 function receivedMessage(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  console.log("Received message for user %d and page %d at %d with message:", 
+  console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
 
@@ -88,6 +88,9 @@ function receivedMessage(event) {
     switch (messageText) {
       case 'generic':
         sendGenericMessage(senderID);
+        break;
+      case 'list':
+        sendListMessage(senderID);
         break;
 
       default:
@@ -111,7 +114,7 @@ function sendGenericMessage(recipientId) {
           elements: [{
             title: "rift",
             subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",               
+            item_url: "https://www.oculus.com/en-us/rift/",
             image_url: "http://messengerdemo.parseapp.com/img/rift.png",
             buttons: [{
               type: "web_url",
@@ -125,7 +128,7 @@ function sendGenericMessage(recipientId) {
           }, {
             title: "touch",
             subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",               
+            item_url: "https://www.oculus.com/en-us/touch/",
             image_url: "http://messengerdemo.parseapp.com/img/touch.png",
             buttons: [{
               type: "web_url",
@@ -140,7 +143,111 @@ function sendGenericMessage(recipientId) {
         }
       }
     }
-  };  
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendListMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          elements: [{
+              title: "Classic T-Shirt Collection",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+              subtitle: "See all our colors",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop_collection",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "View",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/collection",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic White T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic Blue T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=101",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=101",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic Black T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=102",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=102",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            }
+          ],
+          buttons: [{
+            title: "View More",
+            type: "postback",
+            payload: "payload"
+          }]
+        }
+      }
+    }
+  };
 
   callSendAPI(messageData);
 }
@@ -161,7 +268,9 @@ function sendTextMessage(recipientId, messageText) {
 function callSendAPI(messageData) {
   rp({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: config.pageAccessToken },
+    qs: {
+      access_token: config.pageAccessToken
+    },
     method: 'POST',
     json: messageData
 
@@ -170,14 +279,14 @@ function callSendAPI(messageData) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
 
-      console.log("Successfully sent generic message with id %s to recipient %s", 
+      console.log("Successfully sent generic message with id %s to recipient %s",
         messageId, recipientId);
     } else {
       console.error("Unable to send message.");
       console.error(response);
       console.error(error);
     }
-  });  
+  });
 }
 
 // Take array of story IDs and return array of story objects
