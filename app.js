@@ -160,14 +160,12 @@ function sendListMessage(recipientId) {
           "template_type": "list",
           "elements": [{
               "title": "Element One",
-              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "See all our colors",
               "default_action": {
                 "type": "web_url",
                 "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989"
               },
               "buttons": [{
                 "title": "View",
@@ -175,19 +173,16 @@ function sendListMessage(recipientId) {
                 "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989"
               }]
             },
             {
               "title": "Element Two",
-              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "subtitle": "See all our colors",
               "default_action": {
                 "type": "web_url",
                 "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989"
               },
               "buttons": [{
                 "title": "View",
@@ -195,7 +190,6 @@ function sendListMessage(recipientId) {
                 "url": "https://www.facebook.com/HN-Chatbot-101586460489989",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
-                "fallback_url": "https://www.facebook.com/HN-Chatbot-101586460489989"
               }]
             },
           ],
