@@ -164,7 +164,7 @@ function sendListMessage(recipientId) {
               "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
               "default_action": {
                 "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "url": "https://elaineou.com/2017/01/19/how-the-twitter-app-bypasses-paywalls/",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
@@ -174,7 +174,7 @@ function sendListMessage(recipientId) {
               "subtitle": "149 points by olegkikin 4 hours ago",
               "default_action": {
                 "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "url": "http://www.redblobgames.com/x/1728-elevation-control/",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
@@ -184,7 +184,7 @@ function sendListMessage(recipientId) {
               "subtitle": "294 points by chriskanan 7 hours ago",
               "default_action": {
                 "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
+                "url": "https://leigh-annegalloway.com/myspace/",
                 "messenger_extensions": true,
                 "webview_height_ratio": "tall",
               },
