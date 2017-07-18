@@ -25,6 +25,34 @@ app.get('/top', (req, res) => {
     .catch((error) => (console.log(error)))
 });
 
+app.get('/top/:id', (req, res) => {
+  rp('https://hacker-news.firebaseio.com/v0/topstories.json')
+    .then((body) => {
+      // Get requested story
+      const story = JSON.parse(body).splice(req.params.id, 1);
+
+      // Get Story and send it
+      getStories(story)
+        .then((mappedStories) => (res.send(mappedStories)))
+        .catch((error) => (console.log(error)))
+    })
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/top/:id/redirect', (req, res) => {
+  rp('https://hacker-news.firebaseio.com/v0/topstories.json')
+    .then((body) => {
+      // Get requested story
+      const story = JSON.parse(body).splice(req.params.id, 1);
+
+      // Get Story and send it
+      getStories(story)
+        .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+        .catch((error) => (console.log(error)))
+    })
+    .catch((error) => (console.log(error)))
+})
+
 app.get('/webhook', function (req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
     req.query['hub.verify_token'] === 'thisisatoken') {
