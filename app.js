@@ -4,7 +4,7 @@ const cors = require('cors');
 const rp = require('request-promise');
 const config = require('./config');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 
 // Ping Server
@@ -53,7 +53,7 @@ app.get('/v0/top/:id/redirect', (req, res) => {
     .catch((error) => (console.log(error)))
 })
 
-app.get('/v0/webhook', function (req, res) {
+app.get('/v0/webhook', (req, res) => {
   if (req.query['hub.mode'] === 'subscribe' &&
     req.query['hub.verify_token'] === 'thisisatoken') {
     console.log("Validating webhook");
@@ -64,19 +64,19 @@ app.get('/v0/webhook', function (req, res) {
   }
 });
 
-app.post('/v0/webhook', function (req, res) {
-  var data = req.body;
+app.post('/v0/webhook', (req, res) => {
+  const data = req.body;
 
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
-    data.entry.forEach(function (entry) {
-      var pageID = entry.id;
-      var timeOfEvent = entry.time;
+    data.entry.forEach((entry) => {
+      const pageID = entry.id;
+      const timeOfEvent = entry.time;
 
       // Iterate over each messaging event
-      entry.messaging.forEach(function (event) {
+      entry.messaging.forEach((event) => {
         if (event.message) {
           receivedMessage(event);
         } else {
@@ -94,25 +94,21 @@ app.post('/v0/webhook', function (req, res) {
   }
 });
 
-function receivedMessage(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
+receivedMessage = (event) => {
+  const senderID = event.sender.id;
+  const recipientID = event.recipient.id;
+  const timeOfMessage = event.timestamp;
+  const message = event.message;
 
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
 
-  var messageId = message.mid;
+  const messageId = message.mid;
 
-  var messageText = message.text.toLowerCase();
-  var messageAttachments = message.attachments;
-
+  const messageText = message.text.toLowerCase();
+  
   if (messageText) {
-
-    // If we receive a text message, check to see if it matches a keyword
-    // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
       case 'top':
         sendListMessage(senderID);
@@ -122,13 +118,11 @@ function receivedMessage(event) {
         console.log('Not Found')
         break;
     }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
   }
 }
 
-function sendListMessage(recipientId) {
-  var messageData = {
+const sendListMessage = (recipientId) => {
+  const messageData = {
     "recipient": {
       "id": recipientId
     },
