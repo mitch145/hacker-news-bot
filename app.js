@@ -297,71 +297,71 @@ function sendTopStories(recipientId) {
           }]
         }
       }
-    };
-
-
-
-function callSendAPI(messageData) {
-  rp({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {
-      access_token: config.pageAccessToken
-    },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s",
-        messageId, recipientId);
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
     }
-  });
+  }
 }
 
-  const sendTextMessage = (recipientId, messageText) => {
-    var messageData = {
-      recipient: {
-        id: recipientId
+// function callSendAPI(messageData) {
+//   rp({
+//     uri: 'https://graph.facebook.com/v2.6/me/messages',
+//     qs: {
+//       access_token: config.pageAccessToken
+//     },
+//     method: 'POST',
+//     json: messageData
+
+//   }, function (error, response, body) {
+//     if (!error && response.statusCode == 200) {
+//       var recipientId = body.recipient_id;
+//       var messageId = body.message_id;
+
+//       console.log("Successfully sent generic message with id %s to recipient %s",
+//         messageId, recipientId);
+//     } else {
+//       console.error("Unable to send message.");
+//       console.error(response);
+//       console.error(error);
+//     }
+//   });
+// }
+
+const sendTextMessage = (recipientId, messageText) => {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+// Call Facebook send API
+const callSendAPI = messageData => {
+  rp({
+      uri: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {
+        access_token: config.pageAccessToken
       },
-      message: {
-        text: messageText
-      }
-    };
+      method: 'POST',
+      json: messageData
 
-    callSendAPI(messageData);
-  }
+    })
+    .catch((error) => (console.error(error)))
+}
 
-  // Call Facebook send API
-  const callSendAPI = messageData => {
-    rp({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-          access_token: config.pageAccessToken
-        },
-        method: 'POST',
-        json: messageData
-
-      })
-      .catch((error) => (console.error(error)))
-  }
-
-  // Take array of story IDs and return array of story objects
-  const getStories = stories => {
-    return Promise.all(
-      stories.map(
-        (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
-          .then((data) => (JSON.parse(data)))
-        )
+// Take array of story IDs and return array of story objects
+const getStories = stories => {
+  return Promise.all(
+    stories.map(
+      (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
+        .then((data) => (JSON.parse(data)))
       )
     )
-  }
+  )
+}
 
-  app.listen(process.env.PORT || 8080);
-  console.log("The server is now running on port 8080.");
+app.listen(process.env.PORT || 8080);
+console.log("The server is now running on port 8080.");
