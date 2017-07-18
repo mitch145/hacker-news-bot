@@ -89,7 +89,7 @@ function receivedMessage(event) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-      case 'list':
+      case 'top':
         sendListMessage(senderID);
         break;
 
@@ -116,6 +116,7 @@ function sendGenericMessage(recipientId) {
             subtitle: "Next-generation virtual reality",
             item_url: "https://www.oculus.com/en-us/rift/",
             image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
+
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
@@ -198,18 +199,107 @@ function sendListMessage(recipientId) {
   callSendAPI(messageData);
 }
 
-function sendTextMessage(recipientId, messageText) {
+function sendTopStories(recipientId) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
-      text: messageText
-    }
-  };
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          elements: [{
+              title: "Classic T-Shirt Collection",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+              subtitle: "See all our colors",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop_collection",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "View",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/collection",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic White T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=100",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic Blue T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=101",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=101",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            },
+            {
+              title: "Classic Black T-Shirt",
+              image_url: "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
+              subtitle: "100% Cotton, 200% Comfortable",
+              default_action: {
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/view?item=102",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              },
+              buttons: [{
+                title: "Shop Now",
+                type: "web_url",
+                url: "https://peterssendreceiveapp.ngrok.io/shop?item=102",
+                messenger_extensions: true,
+                webview_height_ratio: "tall",
+                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
+              }]
+            }
+          ],
+          buttons: [{
+            title: "View More",
+            type: "postback",
+            payload: "payload"
+          }]
+        }
+      }
+    };
 
-  callSendAPI(messageData);
-}
+
 
 function callSendAPI(messageData) {
   rp({
@@ -235,16 +325,43 @@ function callSendAPI(messageData) {
   });
 }
 
-// Take array of story IDs and return array of story objects
-const getStories = stories => {
-  return Promise.all(
-    stories.map(
-      (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
-        .then((data) => (JSON.parse(data)))
+  const sendTextMessage = (recipientId, messageText) => {
+    var messageData = {
+      recipient: {
+        id: recipientId
+      },
+      message: {
+        text: messageText
+      }
+    };
+
+    callSendAPI(messageData);
+  }
+
+  // Call Facebook send API
+  const callSendAPI = messageData => {
+    rp({
+        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+          access_token: config.pageAccessToken
+        },
+        method: 'POST',
+        json: messageData
+
+      })
+      .catch((error) => (console.error(error)))
+  }
+
+  // Take array of story IDs and return array of story objects
+  const getStories = stories => {
+    return Promise.all(
+      stories.map(
+        (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
+          .then((data) => (JSON.parse(data)))
+        )
       )
     )
-  )
-}
+  }
 
-app.listen(process.env.PORT || 8080);
-console.log("The server is now running on port 8080.");
+  app.listen(process.env.PORT || 8080);
+  console.log("The server is now running on port 8080.");
