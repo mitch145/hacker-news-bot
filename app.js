@@ -106,7 +106,6 @@ const sendListMessage = (recipientId) => {
         message: {
           attachment: {
             type: "template",
-            top_element_style: "compact",
             payload: {
               template_type: "list",
               elements: mappedStories.map((story, index) => (
@@ -127,6 +126,7 @@ const sendListMessage = (recipientId) => {
       };
 
       // messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
+      messageData.message.attachment.payload.elements[0].top_element_style = "compact";
 
       callSendAPI(messageData);
     })
