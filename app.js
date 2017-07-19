@@ -15,20 +15,56 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => (res.send('Hello World')))
 
 // Get IDs of top 10 stories
+app.get('/v0/new', (req, res) => {
+  helpers.getStories(0, 3, 'new')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+});
+
+app.get('/v0/new/:id', (req, res) => {
+  helpers.getStories(parseInt(req.params.id), 1, 'new')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/new/:id/redirect', (req, res) => {
+  helpers.getStories(req.params.id, 1, 'new')
+    .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+    .catch((error) => (console.log(error)))
+})
+
 app.get('/v0/top', (req, res) => {
-  helpers.getTopStories(0, 3)
+  helpers.getStories(0, 3, 'top')
     .then((mappedStories) => (res.send(mappedStories)))
     .catch((error) => (console.log(error)))
 });
 
 app.get('/v0/top/:id', (req, res) => {
-  helpers.getTopStories(parseInt(req.params.id), 1)
+  helpers.getStories(parseInt(req.params.id), 1, 'top')
     .then((mappedStories) => (res.send(mappedStories)))
     .catch((error) => (console.log(error)))
 })
 
 app.get('/v0/top/:id/redirect', (req, res) => {
-  helpers.getTopStories(req.params.id, 1)
+  helpers.getStories(req.params.id, 1, 'top')
+    .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/best', (req, res) => {
+  helpers.getStories(0, 3, 'best')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+});
+
+app.get('/v0/best/:id', (req, res) => {
+  helpers.getStories(parseInt(req.params.id), 1, 'best')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/best/:id/redirect', (req, res) => {
+  helpers.getStories(req.params.id, 1, 'best')
     .then((mappedStories) => (res.redirect(mappedStories[0].url)))
     .catch((error) => (console.log(error)))
 })
@@ -84,8 +120,14 @@ receivedMessage = (event) => {
 
   if (messageText) {
     switch (messageText) {
+      case 'new':
+        sendListMessage(senderID, 'new');
+        break;
       case 'top':
-        sendListMessage(senderID);
+        sendListMessage(senderID, 'top');
+        break;
+      case 'best':
+        sendListMessage(senderID, 'best');
         break;
 
       default:
@@ -95,8 +137,8 @@ receivedMessage = (event) => {
   }
 }
 
-const sendListMessage = (recipientId) => {
-  helpers.getTopStories(0, 3)
+const sendListMessage = (recipientId, endpoint) => {
+  helpers.getStories(0, 3, endpoint)
     .then((mappedStories) => {
 
       const messageData = {
@@ -115,7 +157,7 @@ const sendListMessage = (recipientId) => {
                   subtitle: `${story.score} points by ${story.by}`,
                   default_action: {
                     type: "web_url",
-                    url: `https://hacker-news-chatbot.herokuapp.com/v0/top/${index}/redirect`,
+                    url: `https://hacker-news-chatbot.herokuapp.com/v0/${endpoint}/${index}/redirect`,
                     messenger_extensions: true,
                     webview_height_ratio: "tall",
                   }

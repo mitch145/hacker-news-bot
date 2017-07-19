@@ -1,8 +1,8 @@
 // Vendor Dependencies
 const rp = require('request-promise');
 
-const getTopStories = (index, amount) => {
-  return rp('https://hacker-news.firebaseio.com/v0/topstories.json')
+const getStories = (index, amount, endpoint) => {
+  return rp(`https://hacker-news.firebaseio.com/v0/${endpoint}stories.json`)
     .then((body) => {
       const stories = JSON.parse(body).slice(index, index + amount);
       return getStoriesFromIDs(stories)
@@ -21,5 +21,5 @@ const getStoriesFromIDs = stories => {
 }
 
 module.exports = {
-  getTopStories: getTopStories,
+  getStories: getStories,
 }
