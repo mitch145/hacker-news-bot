@@ -125,7 +125,7 @@ const sendListMessage = (recipientId) => {
         }
       };
 
-      messageData.message.elements[0].image_url = "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0";
+      messageData.message.elements[0].image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
 
       callSendAPI(messageData);
     })
