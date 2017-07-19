@@ -107,10 +107,10 @@ const sendListMessage = (recipientId) => {
           attachment: {
             type: "template",
             payload: {
+              top_element_style: "compact",
               template_type: "list",
               elements: mappedStories.map((story, index) => (
                 { 
-                  top_element_style: "compact",
                   title: story.title,
                   subtitle: `${story.score} points by ${story.by}`,
                   default_action: {
