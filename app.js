@@ -125,7 +125,7 @@ const sendListMessage = (recipientId) => {
         }
       };
 
-      messageData.message.elements[0].image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
+      messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
 
       callSendAPI(messageData);
     })
