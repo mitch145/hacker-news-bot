@@ -1,31 +1,75 @@
+// Vendor Dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rp = require('request-promise');
 const config = require('./config');
 
-var app = express();
+// Custom Dependencies
+const helpers = require('./helpers');
+
+const app = express();
 app.use(bodyParser.json());
 
 // Ping Server
 app.get('/', (req, res) => (res.send('Hello World')))
 
 // Get IDs of top 10 stories
-app.get('/top', (req, res) => {
-  // Get top story IDs
-  rp('https://hacker-news.firebaseio.com/v0/topstories.json')
-    .then((body) => {
-      // Only keep top 10 stories
-      const stories = JSON.parse(body).slice(0, 10);
-      // Get story objects from stories array
-      getStories(stories)
-        .then((mappedStories) => (res.send(mappedStories)))
-        .catch((error) => (console.log(error)))
-    })
+app.get('/v0/new', (req, res) => {
+  helpers.getStories(0, 3, 'new')
+    .then((mappedStories) => (res.send(mappedStories)))
     .catch((error) => (console.log(error)))
 });
 
-app.get('/webhook', function (req, res) {
+app.get('/v0/new/:id', (req, res) => {
+  helpers.getStories(parseInt(req.params.id), 1, 'new')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/new/:id/redirect', (req, res) => {
+  helpers.getStories(req.params.id, 1, 'new')
+    .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/top', (req, res) => {
+  helpers.getStories(0, 3, 'top')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+});
+
+app.get('/v0/top/:id', (req, res) => {
+  helpers.getStories(parseInt(req.params.id), 1, 'top')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/top/:id/redirect', (req, res) => {
+  helpers.getStories(req.params.id, 1, 'top')
+    .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/best', (req, res) => {
+  helpers.getStories(0, 3, 'best')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+});
+
+app.get('/v0/best/:id', (req, res) => {
+  helpers.getStories(parseInt(req.params.id), 1, 'best')
+    .then((mappedStories) => (res.send(mappedStories)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/best/:id/redirect', (req, res) => {
+  helpers.getStories(req.params.id, 1, 'best')
+    .then((mappedStories) => (res.redirect(mappedStories[0].url)))
+    .catch((error) => (console.log(error)))
+})
+
+app.get('/v0/webhook', (req, res) => {
   if (req.query['hub.mode'] === 'subscribe' &&
     req.query['hub.verify_token'] === 'thisisatoken') {
     console.log("Validating webhook");
@@ -36,19 +80,19 @@ app.get('/webhook', function (req, res) {
   }
 });
 
-app.post('/webhook', function (req, res) {
-  var data = req.body;
+app.post('/v0/webhook', (req, res) => {
+  const data = req.body;
 
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
-    data.entry.forEach(function (entry) {
-      var pageID = entry.id;
-      var timeOfEvent = entry.time;
+    data.entry.forEach((entry) => {
+      const pageID = entry.id;
+      const timeOfEvent = entry.time;
 
       // Iterate over each messaging event
-      entry.messaging.forEach(function (event) {
+      entry.messaging.forEach((event) => {
         if (event.message) {
           receivedMessage(event);
         } else {
@@ -56,252 +100,83 @@ app.post('/webhook', function (req, res) {
         }
       });
     });
-
-    // Assume all went well.
-    //
-    // You must send back a 200, within 20 seconds, to let us know
-    // you've successfully received the callback. Otherwise, the request
-    // will time out and we will keep trying to resend.
     res.sendStatus(200);
   }
 });
 
-function receivedMessage(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
+receivedMessage = (event) => {
+  const senderID = event.sender.id;
+  const recipientID = event.recipient.id;
+  const timeOfMessage = event.timestamp;
+  const message = event.message;
 
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
 
-  var messageId = message.mid;
+  const messageId = message.mid;
 
-  var messageText = message.text;
-  var messageAttachments = message.attachments;
+  const messageText = message.text.toLowerCase();
 
   if (messageText) {
-
-    // If we receive a text message, check to see if it matches a keyword
-    // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
-      case 'generic':
-        sendGenericMessage(senderID);
+      case 'new':
+        sendListMessage(senderID, 'new');
         break;
       case 'top':
-        sendListMessage(senderID);
+        sendListMessage(senderID, 'top');
+        break;
+      case 'best':
+        sendListMessage(senderID, 'best');
         break;
 
       default:
-        sendTextMessage(senderID, messageText);
+        console.log('Not Found')
+        break;
     }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
   }
 }
 
-function sendGenericMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",
-            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
+const sendListMessage = (recipientId, endpoint) => {
+  helpers.getStories(0, 3, endpoint)
+    .then((mappedStories) => {
 
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
-            }],
-          }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: "hhttps://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
-          }]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-function sendListMessage(recipientId) {
-  var messageData = {
-    "recipient": {
-      "id": recipientId
-    },
-    "message": {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "list",
-          "elements": [{
-              "title": "Seeing AI for iOS",
-              "subtitle": "173 points by kmather73 4 hours ago",
-              "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
-              "default_action": {
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              },
-            },
-            {
-              "title": "Gpu.js – GPU Accelerated JavaScript",
-              "subtitle": "149 points by olegkikin 4 hours ago",
-              "default_action": {
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              },
-            },
-            {
-              "title": "Google is releasing 20M bacteria-infected mosquitoes in Fresno",
-              "subtitle": "294 points by chriskanan 7 hours ago",
-              "default_action": {
-                "type": "web_url",
-                "url": "https://hacker-news-chatbot.herokuapp.com/top",
-                "messenger_extensions": true,
-                "webview_height_ratio": "tall",
-              },
-            },
-          ],
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-function sendTopStories(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "list",
-          elements: [{
-              title: "Classic T-Shirt Collection",
-              image_url: "https://peterssendreceiveapp.ngrok.io/img/collection.png",
-              subtitle: "See all our colors",
-              default_action: {
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/shop_collection",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              },
-              buttons: [{
-                title: "View",
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/collection",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              }]
-            },
-            {
-              title: "Classic White T-Shirt",
-              image_url: "https://peterssendreceiveapp.ngrok.io/img/white-t-shirt.png",
-              subtitle: "100% Cotton, 200% Comfortable",
-              default_action: {
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/view?item=100",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              },
-              buttons: [{
-                title: "Shop Now",
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/shop?item=100",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              }]
-            },
-            {
-              title: "Classic Blue T-Shirt",
-              image_url: "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
-              subtitle: "100% Cotton, 200% Comfortable",
-              default_action: {
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/view?item=101",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              },
-              buttons: [{
-                title: "Shop Now",
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/shop?item=101",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              }]
-            },
-            {
-              title: "Classic Black T-Shirt",
-              image_url: "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
-              subtitle: "100% Cotton, 200% Comfortable",
-              default_action: {
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/view?item=102",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              },
-              buttons: [{
-                title: "Shop Now",
-                type: "web_url",
-                url: "https://peterssendreceiveapp.ngrok.io/shop?item=102",
-                messenger_extensions: true,
-                webview_height_ratio: "tall",
-                fallback_url: "https://peterssendreceiveapp.ngrok.io/"
-              }]
+      const messageData = {
+        recipient: {
+          id: recipientId
+        },
+        message: {
+          attachment: {
+            type: "template",
+            payload: {
+              top_element_style: "compact",
+              template_type: "list",
+              elements: mappedStories.map((story, index) => (
+                { 
+                  title: story.title,
+                  subtitle: `${story.score} points by ${story.by}`,
+                  default_action: {
+                    type: "web_url",
+                    url: `https://hacker-news-chatbot.herokuapp.com/v0/${endpoint}/${index}/redirect`,
+                    messenger_extensions: true,
+                    webview_height_ratio: "tall",
+                  }
+                }
+              ))
             }
-          ],
-          buttons: [{
-            title: "View More",
-            type: "postback",
-            payload: "payload"
-          }]
+          }
         }
-      }
-    };
+      };
+
+      // messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
+
+      callSendAPI(messageData);
+    })
+}
 
 
-
-function callSendAPI(messageData) {
+// Call Facebook send API
+const callSendAPI = messageData => {
   rp({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
@@ -310,58 +185,9 @@ function callSendAPI(messageData) {
     method: 'POST',
     json: messageData
 
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s",
-        messageId, recipientId);
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
-    }
-  });
+  })
+    .catch((error) => (console.error(error)))
 }
 
-  const sendTextMessage = (recipientId, messageText) => {
-    var messageData = {
-      recipient: {
-        id: recipientId
-      },
-      message: {
-        text: messageText
-      }
-    };
-
-    callSendAPI(messageData);
-  }
-
-  // Call Facebook send API
-  const callSendAPI = messageData => {
-    rp({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-          access_token: config.pageAccessToken
-        },
-        method: 'POST',
-        json: messageData
-
-      })
-      .catch((error) => (console.error(error)))
-  }
-
-  // Take array of story IDs and return array of story objects
-  const getStories = stories => {
-    return Promise.all(
-      stories.map(
-        (story) => (rp(`https://hacker-news.firebaseio.com/v0/item/${story}.json`)
-          .then((data) => (JSON.parse(data)))
-        )
-      )
-    )
-  }
-
-  app.listen(process.env.PORT || 8080);
-  console.log("The server is now running on port 8080.");
+app.listen(process.env.PORT || 8080);
+console.log("The server is now running on port 8080.");
