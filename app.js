@@ -100,15 +100,16 @@ const sendListMessage = (recipientId) => {
     .then((mappedStories) => {
 
       const messageData = {
-        "recipient": {
-          "id": recipientId
+        recipient: {
+          id: recipientId
         },
-        "message": {
-          "attachment": {
-            "type": "template",
-            "payload": {
-              "template_type": "list",
-              "elements": mappedStories.map((story, index) => (
+        message: {
+          attachment: {
+            type: "template",
+            top_element_style: "compact",
+            payload: {
+              template_type: "list",
+              elements: mappedStories.map((story, index) => (
                 {
                   title: story.title,
                   subtitle: `${story.score} points by ${story.by}`,
@@ -125,7 +126,7 @@ const sendListMessage = (recipientId) => {
         }
       };
 
-      messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
+      // messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
 
       callSendAPI(messageData);
     })
