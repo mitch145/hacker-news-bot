@@ -109,7 +109,8 @@ const sendListMessage = (recipientId) => {
             payload: {
               template_type: "list",
               elements: mappedStories.map((story, index) => (
-                {
+                { 
+                  top_element_style: "compact",
                   title: story.title,
                   subtitle: `${story.score} points by ${story.by}`,
                   default_action: {
@@ -126,7 +127,6 @@ const sendListMessage = (recipientId) => {
       };
 
       // messageData.message.attachment.payload.elements.image_url = "http://www.htmlcsscolor.com/preview/gallery/FF6600.png";
-      messageData.message.attachment.payload.elements[0].top_element_style = "compact";
 
       callSendAPI(messageData);
     })
