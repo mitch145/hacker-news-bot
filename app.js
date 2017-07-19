@@ -96,53 +96,39 @@ receivedMessage = (event) => {
 }
 
 const sendListMessage = (recipientId) => {
-  const messageData = {
-    "recipient": {
-      "id": recipientId
-    },
-    "message": {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "list",
-          "elements": [{
-            "title": "Seeing AI for iOS",
-            "subtitle": "173 points by kmather73 4 hours ago",
-            "image_url": "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0",
-            "default_action": {
-              "type": "web_url",
-              "url": "https://hacker-news-chatbot.herokuapp.com/v0/top/0/redirect",
-              "messenger_extensions": true,
-              "webview_height_ratio": "tall",
-            },
-          },
-          {
-            "title": "Gpu.js – GPU Accelerated JavaScript",
-            "subtitle": "149 points by olegkikin 4 hours ago",
-            "default_action": {
-              "type": "web_url",
-              "url": "https://hacker-news-chatbot.herokuapp.com/v0/top/1/redirect",
-              "messenger_extensions": true,
-              "webview_height_ratio": "tall",
-            },
-          },
-          {
-            "title": "Google is releasing 20M bacteria-infected mosquitoes in Fresno",
-            "subtitle": "294 points by chriskanan 7 hours ago",
-            "default_action": {
-              "type": "web_url",
-              "url": "https://hacker-news-chatbot.herokuapp.com/v0/top/2/redirect",
-              "messenger_extensions": true,
-              "webview_height_ratio": "tall",
-            },
-          },
-          ],
-        }
-      }
-    }
-  };
+  helpers.getTopStories(0, 3)
+    .then((mappedStories) => {
 
-  callSendAPI(messageData);
+      const messageData = {
+        "recipient": {
+          "id": recipientId
+        },
+        "message": {
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "list",
+              "elements": mappedStories.map((story, index) => (
+                {
+                  title: story.title,
+                  subtitle: `${story.score} points by ${story.by}`,
+                  default_action: {
+                    type: "web_url",
+                    url: `https://hacker-news-chatbot.herokuapp.com/v0/top/${index}/redirect`,
+                    messenger_extensions: true,
+                    webview_height_ratio: "tall",
+                  }
+                }
+              ))
+            }
+          }
+        }
+      };
+
+      messageData.message.elements[0].image_url = "https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/19732093_101899587125343_5108999219740115062_n.jpg?oh=d276f55295a2b37a9fc20ed860e01f85&oe=5A0C9BA0";
+
+      callSendAPI(messageData);
+    })
 }
 
 
