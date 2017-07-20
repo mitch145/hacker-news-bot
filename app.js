@@ -7,6 +7,7 @@ const config = require('./config');
 
 // Custom Dependencies
 const helpers = require('./helpers');
+const apiai = require('./apiai')
 
 const app = express();
 app.use(bodyParser.json());
@@ -116,7 +117,41 @@ receivedMessage = (event) => {
 
   const messageId = message.mid;
 
-  const messageText = message.text.toLowerCase();
+  const messageText = message.text;
+
+  var request = app.textRequest(messageText, {
+    sessionId: senderID
+  });
+
+  request.on('response', (response) => {
+    console.log(response.result.parameters.type);
+    if (response.result.metadata.intentName === 'send_stories') {
+      if (response.result.parameters.type) {
+        switch (response.result.parameters.type) {
+          case 'New':
+            sendListMessage(senderID, 'new');
+            break;
+          case 'Top':
+            sendListMessage(senderID, 'top');
+            break;
+          case 'Best':
+            sendListMessage(senderID, 'best');
+            break;
+          default:
+            console.log('Not Found')
+            break;
+        }
+      }
+    } else {
+      console.log('This case needs to be accounted for')
+    }
+  });
+
+  request.on('error', (error) => {
+    console.log(error);
+  });
+
+  request.end();
 
   if (messageText) {
     switch (messageText) {
@@ -152,7 +187,7 @@ const sendListMessage = (recipientId, endpoint) => {
               top_element_style: "compact",
               template_type: "list",
               elements: mappedStories.map((story, index) => (
-                { 
+                {
                   title: story.title,
                   subtitle: `${story.score} points by ${story.by}`,
                   default_action: {
