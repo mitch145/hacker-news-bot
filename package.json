@@ -15,6 +15,7 @@
   "author": "Mitch Ball",
   "license": "ISC",
   "dependencies": {
+    "apiai": "^4.0.3",
     "body-parser": "^1.17.2",
     "cors": "^2.8.3",
     "express": "^4.15.3",
